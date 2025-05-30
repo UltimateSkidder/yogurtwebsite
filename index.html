@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IsoCertifiedShit - Batch Files & Channel</title>
+  <style>
+    /* Reset & Base */
+    * {
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box;
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    }
+
+    :root {
+      /* Lava / Orange-Red Theme */
+      --primary: #ff5e13;
+      --primary-dark: #cc470f;
+      --secondary: #ff3500;
+      --bg-primary: #1a0e00;
+      --bg-secondary: #2e1400;
+      --bg-card: #3d1f00;
+      --text-primary: #f9f4f1;
+      --text-secondary: #d1b89d;
+      --border: #5a3100;
+      --shadow: rgba(255, 94, 19, 0.3);
+      --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      opacity: 0;
+      animation: fadeInUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Floating background elements - Lava version */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: 
+        radial-gradient(circle at 25% 25%, rgba(255, 94, 19, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(255, 53, 0, 0.05) 0%, transparent 50%);
+      animation: float 20s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: rotate(0deg) translate(0, 0); }
+      33% { transform: rotate(1deg) translate(10px, -10px); }
+      66% { transform: rotate(-1deg) translate(-5px, 5px); }
+    }
+
+    /* Header */
+    header {
+      padding: 4rem 2rem 3rem;
+      text-align: center;
+      position: relative;
+      background: linear-gradient(180deg, var(--bg-secondary) 0%, transparent 100%);
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 2px;
+      background: var(--gradient);
+      border-radius: 2px;
+    }
+
+    /* Spinning animation for the logo */
+    @keyframes spin {
+      from { transform: rotate(0deg) scale(1); }
+      to { transform: rotate(360deg) scale(1); }
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      
+      opacity: 0;
+      transform: translateY(20px) scale(0.9);
+      animation: logoEntrance 1s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards,
+                 spin 20s linear infinite;
+      /* slow continuous spin */
+      display: inline-block;
+    }
+
+    @keyframes logoEntrance {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .tagline {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      font-weight: 300;
+      
+      opacity: 0;
+      transform: translateY(15px);
+      animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards;
+    }
+
+    /* Main Content */
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .section {
+      margin-bottom: 5rem;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: sectionReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .section:nth-child(1) { animation-delay: 0.8s; }
+    .section:nth-child(2) { animation-delay: 1s; }
+    .section:nth-child(3) { animation-delay: 1.2s; }
+
+    @keyframes sectionReveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      position: relative;
+      padding-left: 1rem;
+    }
+
+    .section-title::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--gradient);
+      border-radius: 2px;
+    }
+
+    /* Batch Files Grid */
+    .batch-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    .batch-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      cursor: pointer;
+      
+      opacity: 0;
+      transform: translateY(20px);
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .batch-item:nth-child(1) { animation-delay: 1.2s; }
+    .batch-item:nth-child(2) { animation-delay: 1.3s; }
+    .batch-item:nth-child(3) { animation-delay: 1.4s; }
+    .batch-item:nth-child(4) { animation-delay: 1.5s; }
+    .batch-item:nth-child(5) { animation-delay: 1.6s; }
+    .batch-item:nth-child(6) { animation-delay: 1.7s; }
+
+    @keyframes itemReveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .batch-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gradient);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .batch-item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px var(--shadow);
+      border-color: var(--primary);
+    }
+
+    .batch-item:hover::before {
+      transform: scaleX(1);
+    }
+
+    .batch-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .batch-status {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .batch-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--bg-primary);
+      border-color: var(--primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      border-color: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: var(--bg-secondary);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary-dark);
+      color: var(--bg-primary);
+      border-color: var(--primary-dark);
+    }
+
+    /* About Section */
+    .about-text {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 720px;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .channel-link {
+      display: inline-block;
+      margin-top: 1rem;
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+
+    .channel-link:hover {
+      border-color: var(--secondary);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+    }
+  </style>
+  <style>
+  /* Lava glow particles */
+  .lava-particle {
+    position: fixed;
+    pointer-events: none;
+    width: 12px;
+    height: 12px;
+    background: radial-gradient(circle at center, #ff6a00, #cc2300, transparent 80%);
+    border-radius: 50%;
+    filter: drop-shadow(0 0 10px #ff6a00);
+    opacity: 1;
+    animation: fadeOut 1s forwards;
+    mix-blend-mode: screen;
+    z-index: 9999;
+  }
+
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(2);
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('mousemove', e => {
+    // Create a particle div
+    const particle = document.createElement('div');
+    particle.classList.add('lava-particle');
+
+    // Position it at the mouse coordinates
+    particle.style.left = e.clientX + 'px';
+    particle.style.top = e.clientY + 'px';
+
+    // Add it to the body
+    document.body.appendChild(particle);
+
+    // Remove the particle after the animation finishes (1s)
+    particle.addEventListener('animationend', () => {
+      particle.remove();
+    });
+  });
+</script>
+
+</head>
+<body>
+  <header>
+    <img src="https://raw.githubusercontent.com/UltimateSkidder/myownwebsitsegangang/main/gato.png" alt="Logo" class="spin-logo">
+    <p class="tagline">Batch Files</p>
+  </header>
+
+  <main>
+    <section class="section" id="videos">
+      <h2 class="section-title">Project Showcases</h2>
+      <div class="batch-grid">
+        <div class="batch-item">
+          <div class="batch-name">RLM File Showcase</div>
+          <iframe width="100%" height="200" src="https://www.youtube.com/embed/8mFcO5248aA" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="batch-item">
+          <div class="batch-name">Fake Virus Demo</div>
+          <iframe width="100%" height="200" src="https://www.youtube.com/embed/hmrO5WOVaIw" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="batch-files">
+      <h2 class="section-title">Batch Files</h2>
+      <div class="batch-grid">
+        <article class="batch-item">
+          <div class="batch-name">MEMZ Trojan</div>
+          <div class="batch-status">Experimental – For showcase only</div>
+          <div class="batch-actions">
+            <a class="btn" href="#" onclick="alert('No download available')">View</a>
+          </div>
+        </article>
+                  </div>
+        </article>
+        <article class="batch-item">
+          <h3 class="batch-name">RLM 0.5 to 0.9 </h3>
+          <p class="batch-status">Every single version here.</p>
+         <article class="batch-item">
+  <h3 class="batch-name">Download</h3>
+  <p class="batch-status">Here you can download any version you prefer.</p>
+  <div class="batch-actions">
+    <label for="botnet-version" style="margin-right: 10px; font-weight: bold;">Choose version:</label>
+    <select id="botnet-version" onchange="downloadBotnetVersion(this)" style="background-color: #ff5722; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
+      <option value="">-- Select Version --</option>
+      <option value="https://link-center.net/1314021/robloxmultitool">Stable v0.5</option>
+      <option value="https://link-hub.net/1314021/insane-multi-tool">Working V0.7</option>
+      <option value="https://direct-link.net/1314021/rlm-08">Working 0.8</option>
+    </select>
+  </div>
+</article>
+
+<script>
+  function downloadBotnetVersion(select) {
+    const url = select.value;
+    if (url) {
+      window.open(url, '_blank');
+      select.value = "";  // reset selection
+    }
+  }
+</script>
+
+         </div>
+           </article>
+          <article class="batch-item">
+        <h3 class="batch-name">chefs kiss</h3>
+     <div class="batch-name">RLM V1</div>
+  
+  <!-- Sneak Peak Image added here -->
+     <img src="https://raw.githubusercontent.com/UltimateSkidder/myownwebsitsegangang/main/Skjermbilde%202025-05-30%20225557.png" alt="Screenshot" style="width: 400px; height: auto;" />
+
+
+  
+        <div class="batch-status">Coming Soon – Testing in Progress</div>
+       <div class="batch-actions">
+          <a class="btn" href="#">Preview</a>
+            </div>
+          </article>
+            </div>
+            </div>
+        </article>
+        <article class="batch-item">
+          <h3 class="batch-name">IHATEREGGINS</h3>
+          <p class="batch-status">Simple botnet script with minimalist design.</p>
+          <div class="batch-actions">
+            <a class="btn btn-primary" href="https://anonfiles.com/evKf53nCvb/batchbotnet2_bat">Download .BAT</a>
+            <a class="btn btn-secondary" href="https://drive.google.com/file/d/1IfExnxV8Dc4U3uDcT3fkWdbqJvHLf2jp/view?usp=sharing">Download .ZIP</a>
+          </div>
+        </article>
+        <article class="batch-item">
+          <h3 class="batch-name">Yet Another Batch Botnet</h3>
+          <p class="batch-status">Educational batch botnet example with basic networking.</p>
+          <div class="batch-actions">
+            <a class="btn btn-primary" href="https://anonfiles.com/t0v93ngCv3/batchbotnet3_bat">Download .BAT</a>
+            <a class="btn btn-secondary" href="https://drive.google.com/file/d/1qzoGzYhRSQjDy3HSeLpJxAM5wbM-O-zH/view?usp=sharing">Download .ZIP</a>
+          </div>
+        </article>
+        <article class="batch-item">
+          <h3 class="batch-name">Batch DoS Script</h3>
+          <p class="batch-status">Simple denial-of-service simulation script for batch learners.</p>
+          <div class="batch-actions">
+            <a class="btn btn-primary" href="https://anonfiles.com/Fjf89ngCv3/dos_bat">Download .BAT</a>
+            <a class="btn btn-secondary" href="https://drive.google.com/file/d/1Tx2cpO_G23z6MuZ-cbWbAO2o_RJovSzt/view?usp=sharing">Download .ZIP</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <h2 class="section-title">About IsoCertifiedShit Channel</h2>
+      <p class="about-text">
+        Welcome to the IsoCertifiedShit channel. Here you'll find a collection of batch scripts ranging from educational botnets to fun fake viruses and utility scripts. All scripts are provided as-is for learning and entertainment only.
+      </p>
+      <a href="https://www.youtube.com/channel/UC0b13Dx8aJKu2ItPfDQ_6Jg" target="_blank" rel="noopener" class="channel-link">Visit IsoCertifiedShit on YouTube</a>
+    </section>
+
+    <section class="section" id="extras">
+      <h2 class="section-title">Additional Tools & Info</h2>
+      <p class="about-text">
+        This page is designed with a minimalistic modern style, using smooth animations and a dark lava theme with orange/red gradients. 
+        Feel free to browse the batch files and try them in a safe, controlled environment.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 IsoCertifiedShit. All rights reserved.
+  </footer>
+
+</body>
+</html>
